@@ -29,13 +29,13 @@ python -m SimpleHTTPServer
 ### Loading an RDF document:
 Select one of the TTL URLs available in the dropdown menu or enter your own file URL.
 
-> _**Note:** The time taken to analyze and render a graph depends on the size of the TTL file, the configuration and most importantly - your machine’s performance. _
+_**Note:** The time taken to analyze and render a graph depends on the size of the TTL file, the configuration and most importantly - your machine’s performance. _
 
-> _**What to expect:**_
+_**What to expect:**_
 
->- _The time taken to download, analyze and process depends on your connection speed, the size of the file, the configuration and most importantly - your machine’s performance. You should be able to see a blank viewer after this process is complete._
+- _The time taken to download, analyze and process depends on your connection speed, the size of the file, the configuration and most importantly - your machine’s performance. You should be able to see a blank viewer after this process is complete._
 
->- _After some time, the viewer will show you tiny node(s) which are the building(s) in the graph._
+- _After some time, the viewer will show you tiny node(s) which are the building(s) in the graph._
 
 ### Node details:
 If you hover over a node instance, it’ll show a tooltip below your pointer that tells you
@@ -74,7 +74,7 @@ _**What to expect:**_
 
 - _The link width remains visually constant across various zoom levels._
 
-- _The link arrow size will automatically resize accordingly.
+- _The link arrow size will automatically resize accordingly._
 
 _**Note:** Clicking on the link width indicator will reset its value._
 
