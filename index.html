@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2:100,200" rel="stylesheet">
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <script src="force-graph.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="n3-bundle.js"></script>
+    <script src="rdf-studio.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="brick-studio.js"></script>
+    <title>Brick Studio</title>
+</head>
+
+<body class="container">
+    <div id="viewer" class="container editor-closed">
+        <div id="modal">
+            <div class="bg-image"></div>
+            <div>
+                <textarea type="text" id="config"></textarea>
+            </div>
+            <img src="config.png" id="configButton" onclick="javascript:toggleConfig()">
+            <div class="bg-text">
+
+                <div id="modals">
+                    <div id="enterURL" class="show">
+                        <h1 class="title">Brick Studio</h1>
+                        <form class="fetchField" action="javascript:fetchURI()">
+                            <input id="ttluri" type="text" list="TTL">
+                            <datalist id="TTL">
+                                <option value="https://raw.githubusercontent.com/BuildSysUniformMetadata/GroundTruth/master/building_instances/ebu3b_brick.ttl">EBU3B</option>
+                                <option value="https://raw.githubusercontent.com/BuildSysUniformMetadata/GroundTruth/master/building_instances/soda_brick.ttl">SODA</option>
+                                <option value="https://raw.githubusercontent.com/BuildSysUniformMetadata/GroundTruth/master/building_instances/ibm_b3.ttl">IBM_B3</option>
+                                <option value="http://brickschema.org/ttl/ebu3b_brick.ttl">Updated EBU3B</option>
+                            </datalist>
+                            <button type="submit">GO!</button>
+                        </form>
+                    </div>
+                    <div id="fetching">
+                        <h1 class="title">Fetching...</h1>
+                    </div>
+                    <div id="parsing">
+                        <h1 class="title">Parsing...</h1>
+                    </div>
+                    <div id="analyzing">
+                        <h1 class="title">Analyzing...</h1>
+                    </div>
+                    <div id="reducing">
+                        <h1 class="title">Reducing...</h1>
+                    </div>
+                    <div id="preprocessing">
+                        <h1 class="title">Preprocessing...</h1>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="title-viewer" class="title button">
+            VIEWER
+        </div>
+        <div id="zoom-in-button" class="button">
+            +
+        </div>
+        <div id="zoom-out-button" class="button">
+            -
+        </div>
+        <div id="toggle-editor-button" class="button">
+            Edit
+        </div>
+        <div id="viewer-settings">
+
+
+            <div class="viewer-setting container">
+                <div class="viewer-key button"> Node Size </div>
+                <div class="viewer-value button" id="nodeSize"></div>
+                <div class="slidecontainer">
+                    <input type="range" min="2" max="8" value="6" class="slider" id="nodeSizeSlider" step=0.1>
+                </div>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <div class="viewer-key button"> Link Width </div>
+                <div class="viewer-value button" id="linkWidth"></div>
+                <div class="slidecontainer">
+                    <input type="range" min="0.1" max="1" value="0.4" class="slider" id="linkWidthSlider" step=0.1>
+                </div>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <div class="viewer-key button"> Constraint Layout </div>
+                <input class="tgl tgl-light" id="dag" type="checkbox">
+                <label class="tgl-btn" for="dag"></label>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <div class="viewer-key button"> Dark Mode </div>
+                <input class="tgl tgl-light" id="darkMode" type="checkbox">
+                <label class="tgl-btn" for="darkMode"></label>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <div class="viewer-key"> Search</div>
+                <div class="viewer-value button" id="searchBy">
+                    <label class="radio-container">ID
+                        <input type="radio" checked="checked" name="searchBy" value="id" onclick="javascript:search()">
+                        <span class="checkmark"/>
+                    </label>
+                    <label class="radio-container">Type
+                        <input type="radio" name="searchBy" value="type" onclick="javascript:search()">
+                        <span class="checkmark"/>
+                    </label>
+                </div>
+                <input type="search" id="search">
+            </div>
+
+
+            <div class="viewer-setting container">
+                <button class="green-button" id="download" onclick="javascript:showParents()">Root Elements</button>
+            </div>
+
+            <div class="viewer-setting container">
+                <button class="green-button" onclick="javascript:expandAll()">Expand All (beta)</button>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <button class="green-button" id="exportAnalysis">Export Analysis</button>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <button class="green-button" id="download" onclick="javascript:downloadFile()">Download</button>
+            </div>
+        </div>
+        <div id="graph" class="canvas">
+        </div>
+    </div>
+    <div id="editor" class="container">
+        <div id="title-editor" class="title">
+            EDITOR
+        </div>
+        <div id="editor-sidebar" class="container">
+            <div class="node-details" class="container">
+
+                <div id="node-name" class="node-detail container">
+                    <div class="key">
+                        NAME
+                    </div>
+                    <div class="value">
+                        <input type="search" class="value" id="nodeName" list="nodeNames">
+                        <datalist id="nodeNames"></datalist>
+                    </div>
+                </div>
+                <div id="node-type" class="node-detail">
+                    <div class="key">
+                        TYPE
+                    </div>
+                    <div class="value">
+                        <input type="search" class="value" id="nodeType" list="nodeTypes">
+                        <datalist id="nodeTypes"></datalist>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function(event) {
+                $('#enterURL').show()
+        });
+    </script>
+</body>
+
+</html>
