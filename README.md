@@ -29,7 +29,7 @@ python -m SimpleHTTPServer
 ### Loading an RDF document:
 Select one of the TTL URLs available in the dropdown menu or enter your own file URL.
 
-_**Note:** The time taken to analyze and render a graph depends on the size of the TTL file, the configuration and most importantly - your machine’s performance. _
+_**Note:** The time taken to analyze and render a graph depends on the size of the TTL file, the configuration and most importantly - your machine’s performance._
 
 _**What to expect:**_
 
@@ -55,7 +55,7 @@ _**What to expect:**_
 ### Panning:
 To move around, click an empty space and drag the canvas in the desired direction. 
 
-_**Note:**_ Often a combination of zooming and panning helps in navigating faster.
+_**Note:** Often a combination of zooming and panning helps in navigating faster._
 
 ### Looking at the other nodes:
 __Root Elements button:__ This button will collapse all the nodes first and then show only the root nodes (indegree = 0).
