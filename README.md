@@ -3,10 +3,17 @@
 
 [Live Demo](http://brick.andrew.cmu.edu/studio)
 
-OR
+## Hosting
+You can host it using any static server.
 
+### Using Python 2.7
 ```sh
 python -m SimpleHTTPServer
+```
+### Using Node.js
+```sh
+npm install http-server -g
+http-server
 ```
 
 ## Features
