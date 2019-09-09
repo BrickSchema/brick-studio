@@ -451,7 +451,7 @@ $(function() {
     var defaultNodeClick = function(node) {
         if(!node.show)return;
         if(node.collapsed){
-            sound(270);
+            // sound(270);
             // var children = quadStore.getQuads(node.id).filter((quad)=>minifyIRI(quad.predicate.id)!=='type').map((node)=>node.object.id);
             Graph.graphData().nodes.forEach((graphNode)=>{
                 if(node.out.indexOf(graphNode.id)>-1){
@@ -465,7 +465,7 @@ $(function() {
             });
         }
         else{
-            sound(250);
+            // sound(250);
             collapse(node);
         }
         node.collapsed = !node.collapsed;
