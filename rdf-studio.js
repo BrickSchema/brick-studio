@@ -125,7 +125,7 @@ const fetchRdf = function(uri, format = '', resetData = false, callback = parse)
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url": "https://bd-performance.andrew.cmu.edu:3677/" + uri,
+        "url": "https://cors-anywhere.herokuapp.com/" + uri,
         "method": "GET",
         "headers": {
             "cache-control": "no-cache"
