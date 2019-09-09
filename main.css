@@ -503,3 +503,7 @@ form.fetchField::after {
     height: 40%;
     border: none;
 }
+
+input:focus, textarea:focus, select:focus{
+        outline: none;
+}
