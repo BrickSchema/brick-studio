@@ -1114,17 +1114,16 @@ $(function() {
             oldQuads = quadStore.getQuads(null, null, selected.id);
             var prefix = Graph.graphData().nodes.filter((node)=>node.type.indexOf('uilding')>-1)[0].id.split('#')[0];
             var newId = prefix+'#'+$('#nodeName').val();
-            console.log('newId', newId, prefix);
             quadStore.removeQuads(oldQuads);
             newQuads = oldQuads.map((quad)=>{
-                quad.subject.id = newId;
+                quad.object.id = newId;
                 return quad;
             });
             quadStore.addQuads(newQuads);
 
             oldQuads = quadStore.getQuads(selected.id, null, null);
             newQuads = oldQuads.map((quad)=>{
-                quad.object.id = newId;
+                quad.subject.id = newId;
                 return quad;
             });
             quadStore.removeQuads(oldQuads);
