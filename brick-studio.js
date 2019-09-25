@@ -1161,7 +1161,7 @@ $(function() {
 
         }
         else{
-            quadStore.removeQuads(quadStore.getQuads(selected.id, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', null));
+            quadStore.removeQuads(quadStore.getQuads(selected.id, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', selected.type));
             var newType = exportData.rdf.uniqueTypes.filter(type=>type.split('#')[1]===$('#nodeType').val())[0];
             if(newType===undefined){
                 newType = prefixes['brick']+$('#nodeType').val();
