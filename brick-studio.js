@@ -866,10 +866,10 @@ $(function() {
     })
 
     downloadFile = function() {
-        filename = filename.split('/')[filename.split('/').length - 1];
-        if (filename.length == 0) {
-            filename = 'brick_building.ttl'
+        if(filename === undefined || filename.length == 0){
+            filename = 'brick_model.ttl'
         }
+        filename = filename.split('/')[filename.split('/').length - 1];
         write()
 
     }
