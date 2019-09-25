@@ -504,6 +504,6 @@ form.fetchField::after {
     border: none;
 }
 
-input:focus, textarea:focus, select:focus{
-        outline: none;
+button:focus, input:focus, textarea:focus, select:focus{
+    outline: none;
 }
