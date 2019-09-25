@@ -722,18 +722,19 @@ $(function() {
                 $("#nodeNames").html('');
                 $("#nodeTypes").html('');
                 if(selected.source!==undefined){
-                    $('#nodeName').val(minifyIRI(selected.id));
+                    var prefix = selected.id.split('#').shift()
+                    $('#nodeName').val(selected.id.replace('#', ':').replace(prefix, prefixKey(prefix)));
                     $('#nodeType').val(Object.keys(prefixes).filter((p)=>selected.id.split('#').shift()+'#'===prefixes[p])[0]);
                     $('#editor-sidebar').fadeIn(300);
-                    Object.keys(prefixes).forEach((type)=>{
-                        $("#nodeTypes").append($("<option>").attr('value', type.split('#').pop()));
-                    });
+                    $("#node-type").hide();
                     exportData.exports.uniquePredicates.forEach((node)=>{
-                        $("#nodeNames").append($("<option>").attr('value', node.split('#')[1]));
+                        var prefix = node.split('#').shift()
+                        $("#nodeNames").append($("<option>").attr('value', node.replace('#', ':').replace(prefix, prefixKey(prefix))));
                     });
 
                 }
                 else{
+                    $("#node-type").show();
                     $('#nodeName').val(minifyIRI(selected.id));
                     $('#nodeType').val(minifyIRI(selected.type));
                     $('#editor-sidebar').fadeIn(300);
@@ -1088,7 +1089,8 @@ $(function() {
         else if(selected.source!==undefined){
             //from QuadStore
             oldQuads = quadStore.getQuads(selected.source.id, selected.id, selected.target.id);
-            var newPredicate = exportData.exports.uniquePredicates.filter(type=>minifyIRI(type)===$('#nodeName').val())[0];
+            var prefix = $('#nodeName').val().split(':').shift()
+            var newPredicate = $('#nodeName').val().replace(':', '#').replace(prefix, prefixes[prefix]).replace('##', '#')
             $('#nodeType').val(Object.keys(prefixes).filter((p)=>selected.id.split('#')[0]+'#'===prefixes[p])[0]);
             quadStore.removeQuads(oldQuads);
             newQuads = oldQuads.map((quad)=>{
