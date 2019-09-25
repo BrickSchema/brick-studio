@@ -1099,7 +1099,7 @@ $(function() {
 
             // from graphData
             Graph.graphData().links.forEach((link)=>{
-                if(link.id===selected.id){
+                if(link.id===selected.id&&link.source.id===selected.source.id&&link.target.id===selected.target.id){
                     link.id = newPredicate;
                 }
             })
