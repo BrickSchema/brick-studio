@@ -894,12 +894,7 @@ $(function() {
 
     createNew= function() {
         $('#modal').hide()
-        var data = {
-            nodes: [],
-            links: [],
-            uniqueTypes: ['http://buildsys.org/ontologies/https://brickschema.org/schema/1.0.1/Brick#Building', 'https://brickschema.org/schema/1.0.1/Brick#New_Node']
-        }
-        draw(data);
+        parse('');
     }
 
     emitter.on('fetching', (data) => {
