@@ -736,10 +736,12 @@ $(function() {
                 else{
                     $("#node-type").show();
                     $('#nodeName').val(minifyIRI(selected.id));
-                    $('#nodeType').val(minifyIRI(selected.type));
+                    var prefix = selected.type.split('#').shift()
+                    $('#nodeType').val(selected.type.replace('#', ':').replace(prefix, prefixKey(prefix)));
                     $('#editor-sidebar').fadeIn(300);
                     exportData.rdf.uniqueTypes.forEach((type)=>{
-                        $("#nodeTypes").append($("<option>").attr('value', type.split('#').pop()));
+                        var prefix = type.split('#').shift()
+                        $("#nodeTypes").append($("<option>").attr('value', type.replace('#', ':').replace(prefix, prefixKey(prefix))));
                     });
                     Graph.graphData().nodes.forEach((node)=>{
                         $("#nodeNames").append($("<option>").attr('value', node.id.split('#').pop()));
@@ -1158,11 +1160,12 @@ $(function() {
 
     updateType = function(){
         if(selected.source!==undefined){
-
+            //console.log("Update prefix type")
         }
         else{
             quadStore.removeQuads(quadStore.getQuads(selected.id, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', selected.type));
-            var newType = exportData.rdf.uniqueTypes.filter(type=>type.split('#')[1]===$('#nodeType').val())[0];
+            var prefix = $('#nodeType').val().split(':').shift()
+            var newType = $('#nodeType').val().replace(':', '#').replace(prefix, prefixes[prefix]).replace('##', '#');
             if(newType===undefined){
                 newType = prefixes['brick']+$('#nodeType').val();
             }
