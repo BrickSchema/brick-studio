@@ -637,15 +637,16 @@ $(function() {
         selected = tempLink;
         $("#nodeNames").html('');
         $("#nodeTypes").html('');
-        $('#nodeName').val(minifyIRI(selected.id));
-        $('#nodeType').val(Object.keys(prefixes).filter((p)=>selected.id.split('#')[0]+'#'===prefixes[p])[0]);
+        var prefix = selected.id.split('#').shift()
+        $('#nodeName').val(selected.id.replace('#', ':').replace(prefix, prefixKey(prefix)));
+        $('#nodeType').val(Object.keys(prefixes).filter((p)=>selected.id.split('#').shift()+'#'===prefixes[p])[0]);
         $('#editor-sidebar').fadeIn(300);
-        Object.keys(prefixes).forEach((type)=>{
-            $("#nodeTypes").append($("<option>").attr('value', type.split('#')[1]));
-        });
+        $("#node-type").hide();
         exportData.exports.uniquePredicates.forEach((node)=>{
-            $("#nodeNames").append($("<option>").attr('value', node.split('#')[1]));
+            var prefix = node.split('#').shift()
+            $("#nodeNames").append($("<option>").attr('value', node.replace('#', ':').replace(prefix, prefixKey(prefix))));
         });
+
         const {nodes, links} = Graph.graphData();
 
         Graph.graphData({
@@ -702,10 +703,12 @@ $(function() {
                 $("#nodeTypes").html('');
                 // search();
                 $('#nodeName').val(minifyIRI(selected.id));
-                $('#nodeType').val(minifyIRI(selected.type));
+                var prefix = selected.type.split('#').shift()
+                $('#nodeType').val(selected.type.replace('#', ':').replace(prefix, prefixKey(prefix)));
                 $('#editor-sidebar').fadeIn(300);
                 exportData.rdf.uniqueTypes.forEach((type)=>{
-                    $("#nodeTypes").append($("<option>").attr('value', type.split('#')[1]));
+                    var prefix = type.split('#').shift()
+                    $("#nodeTypes").append($("<option>").attr('value', type.replace('#', ':').replace(prefix, prefixKey(prefix))));
                 });
                 Graph.graphData().nodes.forEach((node)=>{
                     $("#nodeNames").append($("<option>").attr('value', node.id.split('#')[1]));
