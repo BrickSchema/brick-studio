@@ -1122,11 +1122,11 @@ $(function() {
             quadStore.addQuads(newQuads);
 
             oldQuads = quadStore.getQuads(selected.id, null, null);
+            quadStore.removeQuads(oldQuads);
             newQuads = oldQuads.map((quad)=>{
                 quad.subject.id = newId;
                 return quad;
             });
-            quadStore.removeQuads(oldQuads);
             quadStore.addQuads(newQuads);
 
             // from graphData
