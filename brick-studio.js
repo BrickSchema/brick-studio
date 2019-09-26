@@ -135,52 +135,61 @@ $(function() {
     });
 
     drawLabeledLinks = function(link, ctx, globalScale) {
+        context = ctx
         const MAX_FONT_SIZE = 4 * document.getElementById("linkWidthSlider").value;
         const LABEL_NODE_MARGIN = Graph.nodeRelSize() * 1.5;
         const start = link.source;
         const end = link.target; // ignore unbound links
 
         if (typeof start !== 'object' || typeof end !== 'object') return; // draw link line
+        if(start.show&&end.show) {
+            ctx.beginPath();
+            ctx.moveTo(start.x, start.y);
+            ctx.lineTo(end.x, end.y);
+            // ctx.strokeStyle = colorByPredicate[link.id];
+            ctx.strokeStyle = getLinkColor(link.id).substring(0, colorByPredicate[link.id].length - 1) + ', ' + link.source.alpha*link.target.alpha + ')';
+            if (selected.source == link.source && selected.id == link.id && selected.target == link.target) {
+                ctx.lineWidth = 4 * document.getElementById("linkWidthSlider").value / globalScale;
 
-        ctx.beginPath();
-        ctx.moveTo(start.x, start.y);
-        ctx.lineTo(end.x, end.y);
-        ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-        ctx.lineWidth = document.getElementById("linkWidthSlider").value / globalScale;
-        ctx.stroke(); // calculate id positioning
+            } else {
 
-        const textPos = Object.assign(...['x', 'y'].map(c => ({
-            [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
+                ctx.lineWidth = document.getElementById("linkWidthSlider").value / globalScale;
+            }
+            ctx.stroke(); // calculate id positioning
 
-        })));
-        const relLink = {
-            x: end.x - start.x,
-            y: end.y - start.y
-        };
-        const maxTextLength = Math.sqrt(Math.pow(relLink.x, 2) + Math.pow(relLink.y, 2)) - LABEL_NODE_MARGIN * 2;
-        let textAngle = Math.atan2(relLink.y, relLink.x); // maintain id vertical orientation for legibility
+            const textPos = Object.assign(...['x', 'y'].map(c => ({
+                [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
 
-        if (textAngle > Math.PI / 2) textAngle = -(Math.PI - textAngle);
-        if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
-        const id = `${minifyIRI(link.id)}`; // estimate fontSize to fit in link length
+            })));
+            const relLink = {
+                x: end.x - start.x,
+                y: end.y - start.y
+            };
+            const maxTextLength = Math.sqrt(Math.pow(relLink.x, 2) + Math.pow(relLink.y, 2)) - LABEL_NODE_MARGIN * 2;
+            let textAngle = Math.atan2(relLink.y, relLink.x); // maintain id vertical orientation for legibility
 
-        ctx.font = '1px Sans-Serif';
-        const fontSize = Math.min(MAX_FONT_SIZE, maxTextLength / ctx.measureText(id).width);
-        ctx.font = `${fontSize}px Sans-Serif`;
-        const textWidth = ctx.measureText(id).width;
-        const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
-        // draw text id (with background rect)
+            if (textAngle > Math.PI / 2) textAngle = -(Math.PI - textAngle);
+            if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
+            const id = `${minifyIRI(link.id)}`; // estimate fontSize to fit in link length
 
-        ctx.save();
-        ctx.translate(textPos.x, textPos.y);
-        ctx.rotate(textAngle);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        ctx.fillRect(-bckgDimensions[0] / 2, -bckgDimensions[1] / 2, ...bckgDimensions);
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = 'darkgrey';
-        ctx.fillText(id, 0, 0);
-        ctx.restore();
+            ctx.font = '1px Sans-Serif';
+            const fontSize = Math.min(MAX_FONT_SIZE, maxTextLength / ctx.measureText(id).width);
+            ctx.font = `${fontSize}px Sans-Serif`;
+            const textWidth = ctx.measureText(id).width;
+            const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
+            // draw text id (with background rect)
+
+            ctx.save();
+            ctx.translate(textPos.x, textPos.y);
+            ctx.rotate(textAngle);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fillRect(-bckgDimensions[0] / 2, -bckgDimensions[1] / 2, ...bckgDimensions);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'darkgrey';
+            ctx.fillText(id, 0, 0);
+            ctx.restore();
+        }
     };
     drawLinks = function(link, ctx, globalScale) {
         context = ctx
