@@ -141,11 +141,11 @@ body{
 #viewer-settings{
     position: absolute;
     width:40%;
-    margin: 2%;
+    margin: 1.25%;
 }
 
 .viewer-setting{
-    padding: 2%;
+    padding: 1.25%;
 }
 .viewer-key{
     /*display: block;*/
