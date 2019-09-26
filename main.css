@@ -141,11 +141,11 @@ body{
 #viewer-settings{
     position: absolute;
     width:40%;
-    margin: 1.25%;
+    margin: 1%;
 }
 
 .viewer-setting{
-    padding: 1.25%;
+    padding: 2%;
 }
 .viewer-key{
     /*display: block;*/
@@ -165,7 +165,7 @@ body{
 
 /* The slider itself */
 .slider {
-    margin-top: 10px;
+    margin-top: 4px;
   -webkit-appearance: none;  /* Override default CSS styles */
   appearance: none;
   width: 100%; /* Full-width */
