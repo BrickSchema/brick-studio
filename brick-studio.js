@@ -59,6 +59,7 @@ var panning,
     darkTheme,
     lightTheme,
     darkMode = false,
+    linkLabels = false,
     minifyIRI,
     createNew;
 
@@ -182,8 +183,8 @@ $(function() {
             ctx.save();
             ctx.translate(textPos.x, textPos.y);
             ctx.rotate(textAngle);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-            ctx.fillRect(-bckgDimensions[0] / 2, -bckgDimensions[1] / 2, ...bckgDimensions);
+            // ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            // ctx.fillRect(-bckgDimensions[0] / 2, -bckgDimensions[1] / 2, ...bckgDimensions);
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = 'darkgrey';
@@ -878,6 +879,18 @@ $(function() {
             lightTheme()
         }
         darkMode = !darkMode;
+    })
+
+    $('#linkLabels').click(() => {
+        if (!linkLabels){
+            Graph.linkCanvasObject(drawLabeledLinks);
+            console.log("Using drawLinks");
+        }
+        else {
+            Graph.linkCanvasObject(drawLinks);
+            console.log("Using drawLabeledLinks");
+        }
+        linkLabels = !linkLabels;
     })
 
     downloadFile = function() {
