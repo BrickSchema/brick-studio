@@ -883,11 +883,13 @@ $(function() {
 
     $('#linkLabels').click(() => {
         if (!linkLabels){
-            Graph.linkCanvasObject(drawLabeledLinks);
+            Graph.linkCanvasObject(drawLabeledLinks)
+                .linkDirectionalArrowRelPos(0.8);
             console.log("Using drawLinks");
         }
         else {
-            Graph.linkCanvasObject(drawLinks);
+            Graph.linkCanvasObject(drawLinks)
+                .linkDirectionalArrowRelPos(0.5);
             console.log("Using drawLabeledLinks");
         }
         linkLabels = !linkLabels;
