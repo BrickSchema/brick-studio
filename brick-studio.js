@@ -233,9 +233,12 @@ $(function() {
         if(showConfig){
             $('#config').slideUp();
             config = JSON.parse($('#config').val());
+            $('#configCommand').text('EDIT');
+
         }else {
             $('#config').slideDown();
             $('#config').val(JSON.stringify(config, null, 4));
+            $('#configCommand').text('SAVE');
         }
         showConfig = !showConfig;
     };

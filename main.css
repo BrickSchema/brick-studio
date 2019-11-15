@@ -483,10 +483,22 @@ form.fetchField::after {
 }
 
 #configButton{
+    cursor: pointer;
+}
+
+#configButtonImage{
     position: absolute;
     top: 2%;
     width: 2%;
     right: 3.5%;
+}
+
+#configCommand{
+    color: white;
+    position: absolute;
+    top: 6%;
+    width: 2%;
+    right: 3.6%;
 }
 
 #config{
