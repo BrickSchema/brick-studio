@@ -6,7 +6,7 @@
 ## Hosting
 You can host it using any static server.
 
-### Using Python 2.7
+### Using Python
 ```sh
 python -m SimpleHTTPServer
 ```
