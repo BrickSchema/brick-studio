@@ -1,5 +1,5 @@
 # BrickStudio
-> Tested on the latest version of Google Chrome v75.0
+> Tested on Google Chrome v75.0
 
 [Live Demo](https://brickschema.org/studio/)
 
