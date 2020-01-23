@@ -1,7 +1,7 @@
 # BrickStudio
 > Tested on the latest version of Google Chrome v75.0
 
-[Live Demo](https://brickschema.github.io/brick-studio/)
+[Live Demo](https://brickschema.org/studio/)
 
 ## Hosting
 You can host it using any static server.
