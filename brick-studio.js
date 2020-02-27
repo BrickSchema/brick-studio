@@ -393,6 +393,7 @@ $(function() {
             })
             .linkDirectionalArrowRelPos(0.5)
             .warmupTicks(200)
+            .d3Force('charge', d3.forceManyBodyReuse())
             .onLinkHover(link => {
                 if(link!==null&&!link.source.show&&!link.target.show)return;
                 elem.style.cursor = link ? 'pointer' : null;
