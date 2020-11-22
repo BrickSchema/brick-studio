@@ -988,6 +988,10 @@ $(function() {
         } else {
             $('#preprocessing').hide();
             $('#modal').hide(duration = 10, complete = () => {
+                if(!config.showInstances){
+                    $('#download').hide();
+                    $('#toggle-editor-button').hide();
+                }
                 draw(data.data);
                 nodes = data.data.nodes.map((node) => node.id);
             })
