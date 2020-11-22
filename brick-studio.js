@@ -957,6 +957,8 @@ $(function() {
 
             $('#analyzing').hide(duration = 10, complete = () => {
                 if (Object.keys(exportData.reduced).length === 0) {
+                    if (!config.showInstances)
+                        hideInstances()
                     minify()
                 } else if (Object.keys(exportData.exports).length === 0) {
                     preprocess()

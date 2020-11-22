@@ -70,27 +70,28 @@ var data = {
 };
 var nodeDepths = {};
 var config = {
-    excludePredicates: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'https://brickschema.org/schema/1.0.1/BrickFrame#hasTag', 'http://www.w3.org/2000/01/rdf-schema#label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag'],
-    excludeTypes: ['http://www.w3.org/2002/07/owl#NamedIndividual', 'https://brickschema.org/schema/1.0.1/Brick#Point', 'http://www.w3.org/2002/07/owl#Class', 'https://brickschema.org/schema/1.0.1/BrickFrame#Label', 'https://brickschema.org/schema/1.0.1/BrickFrame#TagSet'],
+    showInstances: true,
+    excludePredicates: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'https://brickschema.org/schema/1.1/Brick#hasTag', 'http://www.w3.org/2000/01/rdf-schema#label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag'],
+    excludeTypes: ['http://www.w3.org/2002/07/owl#NamedIndividual', 'https://brickschema.org/schema/1.1/Brick#Tag', 'http://www.w3.org/2002/07/owl#Class'],
     defined: {
-        objects: ["https://brickschema.org/schema/1.0.1/BrickFrame#hasTag", "http://www.w3.org/2000/01/rdf-schema#label", "http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag"],
+        objects: ["https://brickschema.org/schema/1.1/Brick#hasTag", "http://www.w3.org/2000/01/rdf-schema#label", "http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag"],
         both: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
     },
     predicateRelationships: [{
-        relationship: 'https://brickschema.org/schema/1.0.1/BrickFrame#hasPoint',
+        relationship: 'https://brickschema.org/schema/1.1/Brick#hasPoint',
         similar: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#hasPoint', 'http://buildsys.org/ontologies/BrickFrame#hasPoint'],
-        inverse: ['https://brickschema.org/schema/1.0.1/BrickFrame#isPointOf', 'https://brickschema.org/schema/1.0.1/Brick#isPointOf', 'https://brickschema.org/schema/1.0.2/BrickFrame#isPointOf', 'https://brickschema.org/schema/1.0.2/Brick#isPointOf']
+        inverse: ['https://brickschema.org/schema/1.1/BrickFrame#isPointOf']
     }, {
-        relationship: 'https://brickschema.org/schema/1.0.1/BrickFrame#hasPart',
+        relationship: 'https://brickschema.org/schema/1.1/BrickFrame#hasPart',
         similar: ['http://buildsys.org/ontologies/BrickFrame#hasPart'],
-        inverse: ['https://brickschema.org/schema/1.0.1/BrickFrame#isPartOf', 'http://buildsys.org/ontologies/BrickFrame#isPartOf', 'https://brickschema.org/schema/1.0.2/BrickFrame#isPartOf']
+        inverse: ['https://brickschema.org/schema/1.1/Brick#isPartOf', 'http://buildsys.org/ontologies/BrickFrame#isPartOf']
     }, {
-        relationship: 'https://brickschema.org/schema/1.0.1/BrickFrame#feeds',
-        inverse: ['https://brickschema.org/schema/1.0.1/BrickFrame#isFedBy']
+        relationship: 'https://brickschema.org/schema/1.1/BrickFrame#feeds',
+        inverse: ['https://brickschema.org/schema/1.1/BrickFrame#isFedBy']
     }, {
-        relationship: 'https://brickschema.org/schema/1.0.1/BrickFrame#contains',
+        relationship: 'https://brickschema.org/schema/1.1/BrickFrame#isLocationOf',
         similar: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#contains'],
-        inverse: ['https://brickschema.org/schema/1.0.1/BrickFrame#isLocatedIn']
+        inverse: ['https://brickschema.org/schema/1.1/BrickFrame#hasLocation']
     }],
     excludeSelfLinks: true,
     allowOtherParentsToCollapse: true
@@ -182,9 +183,23 @@ const store = function(err, quad) {
             status: 'stop'
         })
         if (autopilot)
-            minify();
+            hideInstances();
     }
 };
+
+
+const hideInstances = function(callback = minify){
+    let quads = quadStore.getQuads();
+    for(let quad of quads) {
+        quadStore.addQuad(getType(quad.subject.id), quad.predicate, getType(quad.object.id), quad.graph);
+        quadStore.addQuad(getType(quad.subject.id), "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", getType(quad.subject.id), quad.graph);
+        quadStore.addQuad(getType(quad.object.id), "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", getType(quad.object.id), quad.graph.id);
+        quadStore.removeQuad(quad);
+    };
+    if (autopilot)
+        callback();
+}
+
 
 const identifyUndefinedNodes = function() {
     const allSubjects = new Set(quadStore.getSubjects().map(namedNode => namedNode.id));
@@ -352,8 +367,8 @@ const preprocess = function(callback = draw) {
         data.uniqueTypes.add(getType(node));
         return {
             id: node,
-            show: false,
-            collapsed: true,
+            show: false || !config.showInstances,
+            collapsed: true && config.showInstances,
             out: quadStore.getQuads(node).filter(quads=>quads.predicate.id!=='http://www.w3.org/1999/02/22-rdf-syntax-ns#type').map((quad)=>quad.object.id),
             type: getType(node),
             label: getLabel(node),
