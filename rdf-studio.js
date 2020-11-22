@@ -307,16 +307,20 @@ const analyze = function(store = quadStore, storeIn = 'rdf', callback = preproce
 
 const typoOfSubject = function(subject) {
     const types = quadStore.getObjects(subject, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-    var type = types.length ? types[0].id : 'undefined';
-    return type;
+    return types.length ? types[0].id : 'undefined';
 };
 
 const getType = memoize(typoOfSubject);
 
+const getLabel = function(subject) {
+    const labels = quadStore.getObjects(subject, "http://www.w3.org/2000/01/rdf-schema#label");
+    return labels.length ? labels[0].id : 'undefined';
+};
+
 const preprocess = function(callback = draw) {
     emitter.emit('preprocessing', {
         status: 'start'
-    })
+    });
     console.log('START: PREPROCESSING');
     exportStore.addQuads(quadStore.getQuads());
 
@@ -351,7 +355,8 @@ const preprocess = function(callback = draw) {
             show: false,
             collapsed: true,
             out: quadStore.getQuads(node).filter(quads=>quads.predicate.id!=='http://www.w3.org/1999/02/22-rdf-syntax-ns#type').map((quad)=>quad.object.id),
-            type: getType(node)
+            type: getType(node),
+            label: getLabel(node),
         };
     }))];
     // var newData = {nodes:[], links:[]}

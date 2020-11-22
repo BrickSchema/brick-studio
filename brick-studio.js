@@ -294,8 +294,8 @@ $(function() {
             .nodeLabel(node => {
                 if(node.show){
                     try{
-
-                        return `${minifyIRI(node.type)} : ${node.id.split('#')[node.id.split('#').length - 1]} : ${node.out.length}`
+                        let name = node.label != "undefined" ? node.label : node.id.split('#')[node.id.split('#').length - 1];
+                        return `${minifyIRI(node.type)} : ${name} : ${node.out.length}`
                     }
                     catch (e) {
                         console.log('Invalid node ID: ', node.id)
@@ -360,7 +360,7 @@ $(function() {
                     ctx.strokeStyle = "#0006"
                     ctx.stroke();
                 };
-                const label = minifyIRI(node.id);
+                const label = node.label != "undefined" ? node.label : minifyIRI(node.id);
                 const fontSize = 15 / globalScale;
                 ctx.font = `${fontSize}px Sans-Serif`;
                 const textWidth = ctx.measureText(label).width;
