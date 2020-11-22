@@ -192,9 +192,12 @@ const hideInstances = function(callback = minify){
     let quads = quadStore.getQuads();
     for(let quad of quads) {
         quadStore.addQuad(getType(quad.subject.id), quad.predicate, getType(quad.object.id), quad.graph);
+        quadStore.removeQuad(quad);
+    };
+    quads = quadStore.getQuads();
+    for(let quad of quads) {
         quadStore.addQuad(getType(quad.subject.id), "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", getType(quad.subject.id), quad.graph);
         quadStore.addQuad(getType(quad.object.id), "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", getType(quad.object.id), quad.graph.id);
-        quadStore.removeQuad(quad);
     };
     if (autopilot)
         callback();
@@ -321,6 +324,8 @@ const analyze = function(store = quadStore, storeIn = 'rdf', callback = preproce
 };
 
 const typoOfSubject = function(subject) {
+    if(subject.includes("brickschema.org/schema"))
+        return subject;
     const types = quadStore.getObjects(subject, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
     return types.length ? types[0].id : 'undefined';
 };

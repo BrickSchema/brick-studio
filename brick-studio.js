@@ -294,6 +294,9 @@ $(function() {
             .nodeLabel(node => {
                 if(node.show){
                     try{
+                        if(!config.showInstances){
+                            return node.id.split('#')[node.id.split('#').length - 1]
+                        }
                         let name = node.label != "undefined" ? node.label : node.id.split('#')[node.id.split('#').length - 1];
                         return `${minifyIRI(node.type)} : ${name} : ${node.out.length}`
                     }
