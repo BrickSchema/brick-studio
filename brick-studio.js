@@ -233,13 +233,20 @@ $(function() {
 
     toggleConfig = function () {
         if(showConfig){
+            let value = $('#config').val();
+            localStorage.setItem("config", value);
             $('#config').slideUp();
-            config = JSON.parse($('#config').val());
+            $('#mainModal').slideDown();
+            config = JSON.parse(value);
             $('#configCommand').text('EDIT');
 
         }else {
+            $('#mainModal').slideUp();
             $('#config').slideDown();
-            $('#config').val(JSON.stringify(config, null, 4));
+            let value = localStorage.getItem("config");
+            if(!value || value == null || value == undefined)
+                value = JSON.stringify(config, null, 4);
+            $('#config').val(value);
             $('#configCommand').text('SAVE');
         }
         showConfig = !showConfig;
@@ -455,8 +462,8 @@ $(function() {
                         rcDrawingLink = false;
                     }
                 }
-                console.log(node);
-                console.log(Graph.centerAt());
+                // console.log(node);
+                // console.log(Graph.centerAt());
 
             })
             .onNodeClick(defaultNodeClick)
@@ -1211,7 +1218,7 @@ $(function() {
             if(newType===undefined){
                 newType = prefixes['brick']+$('#nodeType').val();
             }
-            console.log(newType);
+            // console.log(newType);
             selected.type =  newType;
             quadStore.addQuad(selected.id, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', selected.type);
             console.log(selected.id, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', selected.type);

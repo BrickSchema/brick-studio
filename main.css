@@ -510,9 +510,9 @@ form.fetchField::after {
     background: #0005;
     position: absolute;
     top: 0%;
-    width: 80%;
+    width: 75%;
     margin-left: 10%;
-    height: 40%;
+    height: 80%;
     border: none;
 }
 
