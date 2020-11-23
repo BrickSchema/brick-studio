@@ -69,11 +69,11 @@ var data = {
     uniqueTypes: new Set()
 };
 var nodeDepths = {};
-var latestUpdate = "1606116280800";
+var latestUpdate = "1606116280803";
 var config = {
     showInstances: true,
     excludePredicates: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'https://brickschema.org/schema/1.1/Brick#hasTag', 'http://www.w3.org/2000/01/rdf-schema#label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag'],
-    excludeTypes: ['http://www.w3.org/2002/07/owl#NamedIndividual', 'https://brickschema.org/schema/1.1/Brick#Tag', 'http://www.w3.org/2002/07/owl#Class'],
+    excludeTypes: ['http://www.w3.org/2002/07/owl#Restriction', 'https://brickschema.org/schema/1.1/Brick#Tag', 'http://www.w3.org/2002/07/owl#Class'],
     defined: {
         objects: ["https://brickschema.org/schema/1.1/Brick#hasTag", "http://www.w3.org/2000/01/rdf-schema#label", "http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag"],
         both: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
@@ -98,8 +98,8 @@ var config = {
     allowOtherParentsToCollapse: true,
     multilineNodeLabel: {
         enabled: true,
-        fontSize: 1,
-        zoomThreshold: 8
+        fontSize: 1.2,
+        zoomThreshold: 6
     },
     startExpanded: true
     // excludeTypes: ['http://www.w3.org/2002/07/owl#Class', 'http://www.w3.org/2002/07/owl#Ontology']
@@ -414,6 +414,9 @@ const preprocess = function(callback = draw) {
             label:  extractLabelString(node),
         };
     }))];
+    data.nodes = data.nodes.filter(node=>{
+        return !config.excludeTypes.includes(node.id) && !config.excludeTypes.includes(node.type)
+    })
     // var newData = {nodes:[], links:[]}
     data.nodes.filter((node)=>(node.type.split('#')[1] === 'Building')).forEach((node)=>{
         node.show = true;
@@ -431,6 +434,14 @@ const preprocess = function(callback = draw) {
             target: quad.object.id
         };
     });
+
+    data.links = data.links.filter(link=>{
+        return !config.excludeTypes.includes(link.source) && !config.excludeTypes.includes(getType(link.source))
+    })
+
+    data.links = data.links.filter(link=>{
+        return !config.excludeTypes.includes(link.target) && !config.excludeTypes.includes(getType(link.target))
+    })
     // data.nodes = newData.nodes;
     // data.links = newData.links;
     analyze(exportStore, 'exports', () => {});
