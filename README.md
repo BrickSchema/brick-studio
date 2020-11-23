@@ -34,6 +34,7 @@ http-server
 - Collapsible nodes.
 - Option to export analysis.
 - Hide instances (only shows classes)
+- Multiline labels (disable to increase performance)
 
 
 ## VIEWER
