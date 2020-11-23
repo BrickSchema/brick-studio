@@ -63,7 +63,13 @@ var panning,
     darkMode = false,
     linkLabels = !config.showInstances,
     minifyIRI,
-    createNew;
+    createNew,
+    canvasTxt,
+    multilineLabel = config.multilineNodeLabel.enabled,
+    multilineLabelFontSize = config.multilineNodeLabel.fontSize,
+    multilineLabelZoomThreshold = config.multilineNodeLabel.zoomThreshold,
+    startExpanded = config.startExpanded
+;
 
 
 $(function() {
@@ -293,6 +299,7 @@ $(function() {
     };
 
     draw = function(data) {
+        canvasTxt = window.canvasTxt.default;
         linkRenderer = config.showInstances ? drawLinks : drawLabeledLinks;
         linkArrowPosition = config.showInstances ? 0.5 : 0.8;
         graphData = data;
@@ -379,7 +386,18 @@ $(function() {
                 ctx.font = `${fontSize}px Sans-Serif`;
                 const textWidth = ctx.measureText(label).width;
                 const outWidth = ctx.measureText(node.out.length-1).width;
-                if (3 * textWidth < nodeSizeSlider.value * globalScale) {
+                if(multilineLabel && globalScale*multilineLabelFontSize > multilineLabelZoomThreshold){
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = (nodeSizeSlider.value * globalScale) + ' pt Times'
+                    canvasTxt.fontSize = multilineLabelFontSize;
+                    ctx.save()
+                    ctx.translate(node.x, node.y);
+                    ctx.fillStyle = 'white';
+                    canvasTxt.drawText(ctx, label, -1*nodeSizeSlider.value, -1*nodeSizeSlider.value, 2*nodeSizeSlider.value , 2*nodeSizeSlider.value);
+                    ctx.restore()
+                }
+                else if (3 * textWidth < nodeSizeSlider.value * globalScale) {
                     const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
                     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
                     ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
@@ -536,6 +554,13 @@ $(function() {
             node.collapsed = true;
         });
         recursiveExpand(root, null,  0);
+        Graph.graphData().nodes.forEach((node)=>{
+            if(noIns.indexOf(node.id)>-1){
+                root.push(node.id)
+            }
+            node.show = true;
+            node.collapsed = false;
+        });
     };
 
     recursiveExpand = function(nodes, parent, level){
@@ -1009,6 +1034,10 @@ $(function() {
                 }
                 draw(data.data);
                 nodes = data.data.nodes.map((node) => node.id);
+                if(startExpanded){
+                    collapseAll();
+                    expandAll();
+                }
             })
 
         }

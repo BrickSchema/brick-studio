@@ -69,6 +69,7 @@ var data = {
     uniqueTypes: new Set()
 };
 var nodeDepths = {};
+var latestUpdate = "1606116280800";
 var config = {
     showInstances: true,
     excludePredicates: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'https://brickschema.org/schema/1.1/Brick#hasTag', 'http://www.w3.org/2000/01/rdf-schema#label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag'],
@@ -94,9 +95,31 @@ var config = {
         inverse: ['https://brickschema.org/schema/1.1/BrickFrame#hasLocation']
     }],
     excludeSelfLinks: true,
-    allowOtherParentsToCollapse: true
+    allowOtherParentsToCollapse: true,
+    multilineNodeLabel: {
+        enabled: true,
+        fontSize: 1,
+        zoomThreshold: 8
+    },
+    startExpanded: true
     // excludeTypes: ['http://www.w3.org/2002/07/owl#Class', 'http://www.w3.org/2002/07/owl#Ontology']
 };
+
+let value = localStorage.getItem("config");
+let localStorageLastUpdate = localStorage.getItem("lastUpdate");
+if(value !== undefined && value != null){
+    if(latestUpdate>localStorageLastUpdate){
+        localStorage.setItem("lastUpdate", latestUpdate);
+        localStorage.setItem("config", JSON.stringify(config, null, 4));
+    }
+    else{
+        config = JSON.parse(value)
+    }
+}
+else{
+    localStorage.setItem("lastUpdate", latestUpdate);
+    localStorage.setItem("config", JSON.stringify(config, null, 4));
+}
 
 const memoize = fn => {
     let cache = {};
@@ -372,8 +395,8 @@ const preprocess = function(callback = draw) {
         data.uniqueTypes.add(getType(node));
         return {
             id: node,
-            show: false || !config.showInstances,
-            collapsed: true && config.showInstances,
+            show: false || !config.showInstances || config.startExpanded,
+            collapsed: true && config.showInstances && !config.startExpanded,
             out: quadStore.getQuads(node).filter(quads=>quads.predicate.id!=='http://www.w3.org/1999/02/22-rdf-syntax-ns#type').map((quad)=>quad.object.id),
             type: getType(node),
             label: getLabel(node),
@@ -476,4 +499,5 @@ const calculateDepthsByNodes = function({
             }
         }
     }
+
 }
