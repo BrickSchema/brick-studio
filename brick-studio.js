@@ -2,6 +2,8 @@ var panning,
     drawLinks,
     showConfig = false,
     drawLabeledLinks,
+    linkRenderer,
+    linkArrowPosition = config.showInstances ? 0.5 : 0.8,
     mouseOnDown,
     mouseOnUp,
     mouseOnObject,
@@ -59,7 +61,7 @@ var panning,
     darkTheme,
     lightTheme,
     darkMode = false,
-    linkLabels = false,
+    linkLabels = !config.showInstances,
     minifyIRI,
     createNew;
 
@@ -284,6 +286,8 @@ $(function() {
     };
 
     draw = function(data) {
+        linkRenderer = config.showInstances ? drawLinks : drawLabeledLinks;
+        linkArrowPosition = config.showInstances ? 0.5 : 0.8;
         graphData = data;
         var elem = document.getElementById('graph');
         Graph = ForceGraph()(elem)
@@ -394,7 +398,7 @@ $(function() {
                 }
                 return 0;
             })
-            .linkDirectionalArrowRelPos(0.5)
+            .linkDirectionalArrowRelPos(linkArrowPosition)
             .warmupTicks(200)
             .onLinkHover(link => {
                 if(link!==null&&!link.source.show&&!link.target.show)return;
@@ -456,7 +460,7 @@ $(function() {
 
             })
             .onNodeClick(defaultNodeClick)
-            .linkCanvasObject(drawLinks);
+            .linkCanvasObject(linkRenderer);
         Graph.zoom(newGraph ? 18 : Graph.zoom())
         Graph.graphData(data);
         defaultZoom = Graph.zoom();
@@ -888,16 +892,19 @@ $(function() {
     })
 
     $('#linkLabels').click(() => {
-        if (!linkLabels){
-            Graph.linkCanvasObject(drawLabeledLinks)
-                .linkDirectionalArrowRelPos(0.8);
-            console.log("Using drawLinks");
-        }
-        else {
-            Graph.linkCanvasObject(drawLinks)
-                .linkDirectionalArrowRelPos(0.5);
+        console.log(linkLabels, linkArrowPosition)
+        if (linkLabels){
+            linkRenderer = drawLabeledLinks;
+            linkArrowPosition = 0.8;
             console.log("Using drawLabeledLinks");
         }
+        else {
+            linkRenderer = drawLinks;
+            linkArrowPosition = 0.5;
+            console.log("Using drawLinks");
+        }
+        Graph.linkCanvasObject(linkRenderer)
+            .linkDirectionalArrowRelPos(linkArrowPosition);
         linkLabels = !linkLabels;
     })
 
@@ -989,6 +996,7 @@ $(function() {
             $('#preprocessing').hide();
             $('#modal').hide(duration = 10, complete = () => {
                 if(!config.showInstances){
+                    $('#linkLabels').prop('checked', true);
                     $('#download').hide();
                     $('#toggle-editor-button').hide();
                 }
