@@ -1,7 +1,7 @@
 # BrickStudio
 > Tested on Google Chrome v87.0
 
-[Live Demo](https://brickschema.org/studio/)
+[Live Demo](https://brickschema.github.io/brick-studio/)
 
 
 **Note:** This is a static website and does not store any turtle files. Instead, it uses a [cors proxy](https://cors-anywhere.herokuapp.com/) to load the graph data from a remote URL. If it takes too long to load or if your data is sensitive, avoid using the URL input and use file uploads instead.
