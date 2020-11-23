@@ -583,6 +583,10 @@ $(function() {
     var nodeSize = document.getElementById("nodeSize");
     nodeSize.innerHTML = nodeSizeSlider.value;
 
+    var fontSizeSlider = document.getElementById("fontSizeSlider");
+    var fontSize = document.getElementById("fontSize");
+    fontSize.innerHTML = fontSizeSlider.value;
+
     setSize = function(value) {
         Graph.nodeRelSize(value);
         nodeSizeSlider.value = value;
@@ -596,6 +600,11 @@ $(function() {
     nodeSizeSlider.oninput = function() {
         Graph.nodeRelSize(this.value);
         nodeSize.innerHTML = nodeSizeSlider.value;
+    };
+
+    fontSizeSlider.oninput = function() {
+        fontSize.innerHTML = fontSizeSlider.value;
+        multilineLabelFontSize = fontSizeSlider.value;
     };
 
     var linkWidthSlider = document.getElementById("linkWidthSlider");

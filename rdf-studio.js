@@ -214,13 +214,19 @@ const store = function(err, quad) {
 const hideInstances = function(callback = minify){
     let quads = quadStore.getQuads();
     for(let quad of quads) {
-        quadStore.addQuad(getType(quad.subject.id), quad.predicate, getType(quad.object.id), quad.graph);
+        let subjectType = getType(quad.subject.id);
+        let objectType = getType(quad.object.id);
+        quadStore.addQuad(subjectType, quad.predicate, objectType, quad.graph.id);
         quadStore.removeQuad(quad);
     };
     quads = quadStore.getQuads();
     for(let quad of quads) {
-        quadStore.addQuad(getType(quad.subject.id), "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", getType(quad.subject.id), quad.graph);
-        quadStore.addQuad(getType(quad.object.id), "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", getType(quad.object.id), quad.graph.id);
+        let subjectType = getType(quad.subject.id);
+        let objectType = getType(quad.object.id);
+        if(!config.excludeTypes.includes(subjectType))
+            quadStore.addQuad(subjectType, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", subjectType, quad.graph.id);
+        if(!config.excludeTypes.includes(objectType))
+            quadStore.addQuad(objectType, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", objectType, quad.graph.id);
     };
     if (autopilot)
         callback();

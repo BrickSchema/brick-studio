@@ -516,6 +516,10 @@ form.fetchField::after {
     border: none;
 }
 
+#nodeSizeSliderContainer{
+    display: none;
+}
+
 button:focus, input:focus, textarea:focus, select:focus{
     outline: none;
 }
