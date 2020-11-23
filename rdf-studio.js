@@ -391,6 +391,18 @@ const preprocess = function(callback = draw) {
     const allSubjects = new Set(exportStore.getSubjects().map(subject => subject.id));
     const allObjects = new Set(exportStore.getObjects().map(subject => subject.id));
     const exportNodes = new Set([...allSubjects, ...allObjects]);
+
+    const labelMatch = /(?<=")[^"].*(?=")/g;
+    const extractLabelString = function(label){
+        let result = getLabel(label);
+        let extracted = result.match(labelMatch)
+        if (extracted!==null)
+            return extracted[0];
+        else{
+            return result
+        }
+    }
+
     data.nodes = [...new Set([...exportNodes].map(node => {
         data.uniqueTypes.add(getType(node));
         return {
@@ -399,7 +411,7 @@ const preprocess = function(callback = draw) {
             collapsed: true && config.showInstances && !config.startExpanded,
             out: quadStore.getQuads(node).filter(quads=>quads.predicate.id!=='http://www.w3.org/1999/02/22-rdf-syntax-ns#type').map((quad)=>quad.object.id),
             type: getType(node),
-            label: getLabel(node),
+            label:  extractLabelString(node),
         };
     }))];
     // var newData = {nodes:[], links:[]}
