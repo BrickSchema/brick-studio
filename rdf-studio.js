@@ -190,6 +190,8 @@ const reset = function() {
 };
 
 const store = function(err, quad) {
+    if (quad ===  undefined)
+        return;
     if (quad !== null) {
         if (quad.subject.id == quad.object.id) {
             selfLinks.addQuad({
