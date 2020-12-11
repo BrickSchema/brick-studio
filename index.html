@@ -84,11 +84,20 @@
         <div id="viewer-settings">
 
 
-            <div class="viewer-setting container">
+            <div class="viewer-setting container" id="nodeSizeSliderContainer">
                 <div class="viewer-key button"> Node Size </div>
                 <div class="viewer-value button" id="nodeSize"></div>
                 <div class="slidecontainer">
                     <input type="range" min="2" max="8" value="6" class="slider" id="nodeSizeSlider" step=0.1>
+                </div>
+            </div>
+
+
+            <div class="viewer-setting container">
+                <div class="viewer-key button"> Font Size </div>
+                <div class="viewer-value button" id="fontSize"></div>
+                <div class="slidecontainer">
+                    <input type="range" min="0.5" max="4" value="1.2" class="slider" id="fontSizeSlider" step=0.1>
                 </div>
             </div>
 
