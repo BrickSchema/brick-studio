@@ -69,7 +69,7 @@ var data = {
     uniqueTypes: new Set()
 };
 var nodeDepths = {};
-var latestUpdate = "1606116280803";
+var latestUpdate = "1606116280804";
 var config = {
     showInstances: true,
     excludePredicates: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'https://brickschema.org/schema/1.1/Brick#hasTag', 'http://www.w3.org/2000/01/rdf-schema#label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#hasTag'],
@@ -81,18 +81,18 @@ var config = {
     predicateRelationships: [{
         relationship: 'https://brickschema.org/schema/1.1/Brick#hasPoint',
         similar: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#hasPoint', 'http://buildsys.org/ontologies/BrickFrame#hasPoint'],
-        inverse: ['https://brickschema.org/schema/1.1/BrickFrame#isPointOf']
+        inverse: ['https://brickschema.org/schema/1.1/Brick#isPointOf']
     }, {
-        relationship: 'https://brickschema.org/schema/1.1/BrickFrame#hasPart',
+        relationship: 'https://brickschema.org/schema/1.1/Brick#hasPart',
         similar: ['http://buildsys.org/ontologies/BrickFrame#hasPart'],
         inverse: ['https://brickschema.org/schema/1.1/Brick#isPartOf', 'http://buildsys.org/ontologies/BrickFrame#isPartOf']
     }, {
-        relationship: 'https://brickschema.org/schema/1.1/BrickFrame#feeds',
-        inverse: ['https://brickschema.org/schema/1.1/BrickFrame#isFedBy']
+        relationship: 'https://brickschema.org/schema/1.1/Brick#feeds',
+        inverse: ['https://brickschema.org/schema/1.1/Brick#isFedBy']
     }, {
-        relationship: 'https://brickschema.org/schema/1.1/BrickFrame#isLocationOf',
+        relationship: 'https://brickschema.org/schema/1.1/Brick#isLocationOf',
         similar: ['http://www.w3.org/1999/02/22-rdf-syntax-ns#contains'],
-        inverse: ['https://brickschema.org/schema/1.1/BrickFrame#hasLocation']
+        inverse: ['https://brickschema.org/schema/1.1/Brick#hasLocation']
     }],
     excludeSelfLinks: true,
     allowOtherParentsToCollapse: true,
