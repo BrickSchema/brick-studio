@@ -61,7 +61,7 @@ var panning,
     darkTheme,
     lightTheme,
     darkMode = false,
-    linkLabels = !config.showInstances,
+    linkLabels = false,
     minifyIRI,
     createNew,
     canvasTxt,
@@ -300,8 +300,8 @@ $(function() {
 
     draw = function(data) {
         canvasTxt = window.canvasTxt.default;
-        linkRenderer = config.showInstances ? drawLinks : drawLabeledLinks;
-        linkArrowPosition = config.showInstances ? 0.5 : 0.8;
+        linkRenderer = linkLabels ? drawLinks : drawLabeledLinks;
+        linkArrowPosition = linkLabels ? 0.5 : 0.8;
         graphData = data;
         var elem = document.getElementById('graph');
         Graph = ForceGraph()(elem)
@@ -1041,6 +1041,9 @@ $(function() {
                     $('#linkLabels').prop('checked', true);
                     $('#download').hide();
                     $('#toggle-editor-button').hide();
+                }
+                else{
+                    linkLabels = true;
                 }
                 draw(data.data);
                 nodes = data.data.nodes.map((node) => node.id);
