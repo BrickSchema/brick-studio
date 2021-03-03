@@ -381,7 +381,7 @@ $(function() {
                     ctx.strokeStyle = "#0006"
                     ctx.stroke();
                 };
-                const label = node.label != "undefined" ? node.label : minifyIRI(node.id);
+                let label = node.label != "undefined" ? node.label : minifyIRI(node.id);
                 const fontSize = 15 / globalScale;
                 ctx.font = `${fontSize}px Sans-Serif`;
                 const textWidth = ctx.measureText(label).width;
@@ -394,6 +394,7 @@ $(function() {
                     ctx.save()
                     ctx.translate(node.x, node.y);
                     ctx.fillStyle = 'white';
+                    label = label ? label : "undefined";
                     canvasTxt.drawText(ctx, label, -1*nodeSizeSlider.value, -1*nodeSizeSlider.value, 2*nodeSizeSlider.value , 2*nodeSizeSlider.value);
                     ctx.restore()
                 }
